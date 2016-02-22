@@ -109,6 +109,27 @@ def index(table, property):
 # Sorting and Indexing #
 ########################
 
+def flatdex(data, prop, force=False):
+    """
+    Gives a flatdex instead of a dex, such that entries may not be lists.
+    Exact behavior depends on the value of force.
+
+    Args:
+        data - a free table
+        force - determines whether flatness is forced, or only the case 
+                incidentally. Values include:
+                    False -> only cases where len(dex[value]) == 1 are flat
+                    True -> all cases are flat e.g. dex[value] = dex[value][0]
+    """
+
+    dex = indexBy(prop, data)
+    for k in dex:
+        if force == True:
+            dex[k] = dex[k][0]
+        elif force == False:
+            dex[k] = dex[k][0] if len(dex[k]) == 1 else dex[k]
+    return dex
+
 
 ################
 # Manipulation #
@@ -195,27 +216,6 @@ def merge(data, differs = "All"):
     #data is totally replaced with a slightly altered version.
     #creepy, huh?
     return accumulator
-
-def flatdex(data, prop, force=False):
-    """
-    Gives a flatdex instead of a dex, such that entries may not be lists.
-    Exact behavior depends on the value of force.
-
-    Args:
-        data - a free table
-        force - determines whether flatness is forced, or only the case 
-                incidentally. Values include:
-                    False -> only cases where len(dex[value]) == 1 are flat
-                    True -> all cases are flat e.g. dex[value] = dex[value][0]
-    """
-
-    dex = indexBy(prop, data)
-    for k in dex:
-        if force == True:
-            dex[k] = dex[k][0]
-        elif force == False:
-            dex[k] = dex[k][0] if len(dex[k]) == 1 else dex[k]
-    return dex
 
 
 
