@@ -130,6 +130,25 @@ def flatdex(data, prop, force=False):
             dex[k] = dex[k][0] if len(dex[k]) == 1 else dex[k]
     return dex
 
+def multidex(data, prop):
+    """
+    Takes iterable values of prop, and puts each piece of data into a bin
+    where the bin key is a value contained in the value of d[prop].
+    
+    Like indexBy, but for internal content of lists, not the content of the 
+    entire list.
+
+    Example:
+        data = [{"foo": [1,2,3]}]
+        returns {1: [{"foo": [1,2,3]}],
+                 2: [{"foo": [1,2,3]}],
+                 3: [{"foo": [1,2,3]}]}
+    
+
+    """
+    values = list(set(sum([d[prop] for d in data],[])))
+    return {v: [d for d in data if v in d[prop]] for v in values}
+
 
 ################
 # Manipulation #
