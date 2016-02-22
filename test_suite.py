@@ -41,3 +41,9 @@ flat = ft.flatdex(premerged_data, "suf")
 print "Flat Test"
 pprint(flat)
 print
+
+# Multidex Test
+multitest = [{"foo": [1,2,3]}, 
+             {"foo": [2,3,4]}]
+multidex = ft.multidex(multitest, "foo")
+pprint(multidex)
