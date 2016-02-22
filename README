@@ -1,0 +1,136 @@
+##################################################
+# Free Tables: A Conduit for the Magic of Python #
+#   Dan Simonson - 2013                          #
+##################################################
+
+Python data types are awesome. You can do pretty much anything with them.
+One particularly useful arrangement is a list of dictionaries, something
+I started referring to as a "free table."
+
+This is a library for manipulating free tables.
+
+################# Setup
+    $ sudo python setup.py install
+
+That's it really. Python's pretty rad. Future versions may be a little more 
+complicated.
+
+################# Conventions
+data: If an argument is called data, a free table is expected there.
+
+datum/point: A dictionary of a free table. 
+
+dex: If an argument is called dex, then it should be a dex--a dictionary
+whose values are free tables. These are what indexBy returns. 
+
+prop: If an argument is called prop, it's a property. This usually should
+be an entry in every datum in data. It isn't always, sometimes intended for
+retaining consistency. 
+
+################# FAQ
++ Why don't you make an ftable class?
+    No. That defeats the whole point of free tables. They're supposed to be
+    pliable and easily manipulable using Python syntax. They're a convention,
+    not a type. I only see the imposition of a class upon the structure as
+    a hinderance.
+
+    Additionally, free tables are the gestation of a larger movement towards 
+    a classless society free of bourgeoisie oppression. This is because 
+    algorithms are ideology. Power to the people.
+
+    If you think I'm wrong, you're welcome to prove me so.
+
+
+################# Official To-Do/Bugs List
+
+Bugs:
+    + load_csv is a half-baked implementation. No quote support.
+
+To-Do/Ideas (No Particular Order):
+    + validate
+    + a version of validate that doesn't raise an error, but instead
+        just returns naughty and nice lists.
+    + fill_defaults
+        - given a default entry, it fills each data point that lacks
+            a key in default with the kv pair in the default.
+    + dump_csv
+        - both load_csv and dump_csv need to be totally written to handle
+            dialects more formally
+    + load_json, dump_json - I don't use json enough for this, but it's easy.
+    + indexBy4's performance really dragged once pipe was fixed. Further
+        optimizations: change pipe's default from lambda x: x to False and
+        create two cases.
+    + mv(("x","y"), [{"x":...}, ...]) -> [{"y":...}, ...]
+    + has - remove values that don't have property
+    + fulldex: build a dex of every value available. crazy? absolutely.
+    + kmap(data, k, f)
+        d[k] = f(d[k])
+    + tag is so useful, but it's hideous. why is it so wrong? 
+        - too expressive, perhaps
+
+
+################# Version Info
+0.2.4:
+    + flatdex 
+        - dex entries with one member are turned into the dex dictionary values.
+            {1: [{"x":1}]} -> {1: {"x":1}}
+        - force = False
+            - if IS True, it grabs the first entry of each list
+
+0.2.3:
+    + indexBy0 wins the optimization war. Removed alternatives.
+    + Added index, which swaps the arguments of indexBy
+    + singletons("label", [1,2,3]) -> [{"label": 1}, {"label": 2}, ...]
+    + removed pprint statement from merge
+
+0.2.2:
+    + There's load_csv and dump_csv functions now, but they are crap. They work.
+        But they're crap.
+    + This fixes the ";" bug from earlier versions.
+
+0.2.1: 
+    + version number is now a string so I can support multiple "."s
+
+0.21:
+    + indexBy4: ACTUALLY fixed pipe arg. The last fix was sloppy.
+    + indexBy0 is now the winner again, so that's the default now.
+
+0.2:
+    + Finished tag.
+    + Added merge.
+    + Cancelled pickle_load/pickle_dump.
+    + Cancelled transformAllTo (what was it supposed to do?)
+    + indexBy4: pipe arg fixed--may not work properly on others
+
+0.1: 
+    + First test version
+    + indexBy0, indexBy1, indexBy2, indexBy3, indexBy4 added.
+    + indexBy4 selected as optimal.
+        Performances:
+        <function indexBy0 at 0xf6e500> 0.00283553865387
+        <function indexBy2 at 0xf6e6e0> 0.00355636643664
+        <function indexBy3 at 0xf6e758> 0.0116692264226
+        <function indexBy4 at 0xf6e5f0> 0.00204977947795
+    + meta functions 
+        Added: 
+            future: raises an exception when a planned function is called.
+        Planned:
+            validate
+    + Manipulation functions 
+        Added: 
+            histo: turns a dex into a histogram (dictionary with number values)
+            summary: performs histo on each possible key
+        Planned:
+            tag
+            transformAllTo
+    + Hello and Goodbye functions
+        Planned:
+            pickle_load, pickle_dump
+            dump_csv
+            load_json, dump_json
+        Added:
+            load_csv: turns a csv into a free table
+
+
+        
+
