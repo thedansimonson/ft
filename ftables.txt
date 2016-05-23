@@ -1,0 +1,261 @@
+############################
+# Free Tables: Because Data Wants to be Free
+# by Dan Simonson
+#
+# This is a library of functions that generate, manipulate
+# and calculate data from "free tables"--lists of dictionaries.
+# They are meant to be shuffled and manipulated, but to retain
+# all of the data incoprorated in the original data set. 
+#
+# Each entry contains a free table with exactly one data point.
+# This may be an annotation or whatever. 
+#
+# Dan Simonson, 2012
+#
+############################
+
+############################
+# Why are they free?
+#
+# In general, the information content of a table is stored in
+# its structure--like:
+#     
+#         grn | red | blu
+#   pix0| 255 | 128 |  28
+#   pix1| 100 | 231 |  64
+#
+# So this tells us that when the value of "pixel" is pix0, the
+# value of "red" is 128. As a dictionary, we would have:
+#   {"pixel": "pix0", "red": 128, "grn": 255, "blu": 28}
+# We can capture the entire table this way. Note that it is
+# less efficient than a structured table, but we can move 
+# tables around--especially ones with more than 2 dimensions of
+# data--with ease. 
+#
+#
+
+import re
+from string import whitespace
+
+############################
+# Manipulation
+# 
+# Modify a free table in a particular way.
+
+def tag(f, table):
+    """
+     add to all entries in table f(table[*parms])
+     f should be a tuple, such that 
+        ("label", lambda x: function, [param])
+        where "label" is the string for which f[1](x) is stored
+        f[1] is a function which takes keys of the dictionaries as args
+        [param] is the list of keys from any given dictionary in the table
+            that are supplied as arguments to f[1]
+    """
+    label, func, parms = f
+    affect = lambda e: (label, func(*[e[p] for p in parms]))
+    result = [dict([affect(e)]+e.items()) for e in table]
+    return result
+
+
+############################
+# Searching and Sorting
+#
+# These functions are used for sorting data. 
+
+def indexBy(property, table):
+    """
+     Create a dictionary out of a free table whose index values 
+     depend on property. 
+      @param property - the property to sort by
+      @param table - a free table
+      
+      @returns - a dictionary, whose keys are possible values of 
+                   property and values are free tables
+    """
+    pvals = list(set([e[property] for e in table]))
+    result = dict([(v, []) for v in pvals])
+    [result.update([(e[property], result[e[property]]+[e])]) for e in table]
+    return result
+
+def searchable(property, table, default = []):
+    """
+    Curries an indexBy result so that it returns default
+    when a key is not available.
+    """
+    indexed = indexBy(property, table)
+    return lambda v: indexed[v] if v in indexed else default
+
+def f_wise(data, index_value, condition):
+    """
+    return only values who, when data is indexed by index_value, fall into
+    one of the bins that meet condition
+    """
+    data = indexBy(index_value, data).values()
+    data = sum(filter(condition, data), [])
+    return data
+
+
+##########################
+# Statistics
+#
+# Get statistics on free tables
+
+#the fkappa table was designed without free tables in mind.
+#this accounts for that.
+def fKappa(rowKey, colKey, table, opts = ""):
+    pivot = pivotize(rowKey, colKey, table)
+    if "n" in opts: pivot = normalize_pivot(pivot)
+    return old_fKappa(pivot)
+
+def normalize_pivot(pivot):
+    """
+    Normalizes a pivot table to contain the same number of 
+    annotators per row. 
+    """
+    max_annos = max([sum([pivot[v][w] for w in pivot[v]])for v in pivot])
+
+    row_sum = lambda r: sum([r[v] for v in r])
+    norm = lambda r: [("*NORM*", max_annos - row_sum(r))]
+
+    [pivot[v].update(norm(pivot[v])) for v in pivot]
+    return pivot
+
+#NOT YET SUITABLE FOR FREE TABLES
+#calculate Fleiss' kappa from the table
+#based on the old version, based on the Wikipedia article: 
+#Fleiss' Kappa, circa 4 October 2011
+#
+#Takes a table of the sort that's been run through "pivotize"
+def old_fKappa(valDicts):
+	N = len(valDicts)
+	n = lambda r: sum(r.values()) 
+	
+	#the old version of "pivotize" (it had a very different name)
+	#did not recieve the same sort of pivot table. this compensates
+	#for that discrepancy. 
+	valDicts = map(lambda x: valDicts[x], valDicts)
+	
+	#totals of each col (i degenerates, j-axis expressed)
+	#prepare for loop
+	try: totals_i = map(lambda x: 0.0, range(0, len(valDicts[0])))
+	except IndexError: print "What Kappa? More like what data."
+
+	#this is used for consistency. if you do not have
+	#all keys in each valDict, this will fail miserably.
+	keyList = valDicts[0].keys() 
+	#print keyList
+
+	#traverse rows
+	for each in valDicts:
+		#add together all entries in each column
+		rowVals = map(lambda k: each[k], keyList) #grab col vals in order
+		totals_i = map(lambda t, r: t+float(r)/float(n(each)), \
+				totals_i, rowVals)#add col vals 
+
+	#combine the totals with their brethren	keys
+	totals_i = dict(zip(keyList, totals_i))
+
+	#totals of each row (j degenerates, i-axis expressed)	
+	#prepare for loop
+	totals_j = []
+	#traverse rows
+	for each in valDicts:
+		totals_j += [sum(each.values())]
+
+	#output check 1,2,1,2
+	#for each in keyList:
+	#	print str(each) + ": "+ str(totals_i[each])
+	
+	#calculate p_i values for each row
+	p_i = []
+	for each in valDicts:
+		sumSqrs = sum(map(lambda x: x*x, each.values()))
+		sums = sum(each.values())
+		try:
+			p_i += [float(sumSqrs - (sums))/float((sums)*(sums-1))]
+		except ZeroDivisionError:
+			p_i += [1.0]
+	
+	#calculate values
+	#print totals_i
+	p_js = map(lambda x: float(x)/float(N), totals_i.values()) 
+	P_e = sum(map(lambda x: x*x, p_js))
+	P = sum(p_i)/float(N)
+	k = (P-P_e)/(1-P_e)
+	
+	#print "P_is:" + str(p_i)
+	#print "P_j:" + str(p_js)
+	#print "P_e: " + str(P_e)
+	#print "P: " + str(P)
+	
+	return k
+
+#turn a list of dictionaries into a pivot table
+# takes every dictionary, finds the value of colKey,
+# then augments the rowKey value in that entry in the 
+# new table.
+#I could have just done this whole thing with indexBy? maybe?
+def pivotize(rowKey, colKey, table):
+	pivot = {}
+	colsEncountered = []
+
+	#tally values
+	for each in table:
+		row = each[rowKey]
+		col = each[colKey]
+		colsEncountered += [col]
+
+		#has this token not been seen before?
+		if row not in pivot:
+			pivot[row] = {}
+		
+		#count a particular data item
+		if col not in pivot[row]:
+			pivot[row][col] = 1
+		else:
+			pivot[row][col] += 1
+	
+	#give zeros for all non-encountered values
+	colsEncountered = set(colsEncountered)
+	for each in pivot:
+		for more in colsEncountered:
+			if more not in pivot[each]:
+				pivot[each][more] = 0
+	return pivot
+
+
+# Calculate a contingency table from a free table and (r,c)
+# see nltk.BigramAssocMeasures for more info
+# location = (("row", "fart"), ("col", "butt)) or something similar
+# (substitute row and col with appropriate key values
+#
+#tableSum - a function that gets the sum of the table
+# OR you can find it before hand and pass a function like-- lambda x: 5000
+def contingencyTable(wholeTable, location, 
+        tableSum = lambda tab: sum(map(lambda y: y["value"], tab))):
+    rowLabel, colLabel = location
+    rowAlias, rowValue = rowLabel
+    colAlias, colValue = colLabel
+    
+    row = filter(lambda x: x[rowAlias] == rowValue, wholeTable)
+    col = filter(lambda x: x[colAlias] == colValue, wholeTable)
+    
+    print str((rowValue, colValue))
+    print row
+
+    #the value given by (rowValue, colValue)
+    x_ii = filter(lambda x: x[colAlias] == colValue, row)[0]["value"]
+
+    #I may have these swapped, but nbd
+    x_io = sum(map(lambda x: x["value"], row)) - x_ii
+    x_oi = sum(map(lambda x: x["value"], col)) - x_ii
+
+    x_oo = tableSum(wholeTable) - x_io - x_oi - x_ii
+
+    return (x_ii, (x_io, x_oi), x_oo)
+
+
+
+    
+
