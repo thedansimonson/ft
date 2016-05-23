@@ -32,7 +32,7 @@ FAQ:
 import csv
 from pprint import pprint
 
-version = "0.2.6"
+version = "0.2.7"
 
 ########
 # Meta #
