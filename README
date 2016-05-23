@@ -47,6 +47,7 @@ Bugs:
     + load_csv is a half-baked implementation. No quote support.
 
 To-Do/Ideas (No Particular Order):
+    + multidex seems to be superslow--optimizations required.
     + validate
     + a version of validate that doesn't raise an error, but instead
         just returns naughty and nice lists.
