@@ -71,6 +71,13 @@ To-Do/Ideas (No Particular Order):
 
 
 ################# Version Info
+0.2.7:
+    
+
+0.2.5 - 0.2.6: 
+    + ???
+    + multidex
+
 0.2.4:
     + flatdex 
         - dex entries with one member are turned into the dex dictionary values.
