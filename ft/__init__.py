@@ -146,7 +146,10 @@ def multidex(data, prop):
     
 
     """
-    values = list(set(sum([d[prop] for d in data],[])))
+    # replaces the old one liner. that sum(...,[]) trick is too damn slow
+    values = []
+    for d in data: values.extend(d[prop])
+    values = list(set(values))
     return {v: [d for d in data if v in d[prop]] for v in values}
 
 
