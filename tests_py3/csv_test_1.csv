@@ -1,0 +1,35 @@
+mud|num|prs|suf|tns
+IND|SG|1|e|"look at me I'm mr. meeseeks"
+IND|SG|2|es|"look at me I'm mr. meeseeks"
+IND|SG|2|est|"look at me I'm mr. meeseeks"
+IND|SG|3|es|"look at me I'm mr. meeseeks"
+IND|SG|3|eth|"look at me I'm mr. meeseeks"
+IND|PL|0|es|"look at me I'm mr. meeseeks"
+IND|PL|0|s|"look at me I'm mr. meeseeks"
+IND|PL|0|e|"look at me I'm mr. meeseeks"
+IND|PL|0|en|"look at me I'm mr. meeseeks"
+IND|PL|0|eth|"look at me I'm mr. meeseeks"
+INF|0|0|ien|INF
+IND|0|0|d|PRET
+IND|SG|1|ed|PRET
+IND|SG|1|ede|PRET
+IND|SG|2|edest|PRET
+IND|SG|3|ed|PRET
+IND|SG|3|ede|PRET
+IND|PL|0|ede|PRET
+IND|PL|0|eden|PRET
+SUB|SG|0|e|"look at me I'm mr. meeseeks"
+SUB|PL|0|e|"look at me I'm mr. meeseeks"
+SUB|PL|0|en|"look at me I'm mr. meeseeks"
+SUB|SG|0|ed|PRET
+SUB|SG|0|ede|PRET
+SUB|PL|0|ed|PRET
+SUB|PL|0|ede|PRET
+SUB|PL|0|eden|PRET
+PART|0|0|and|"look at me I'm mr. meeseeks"
+PART|0|0|ande|"look at me I'm mr. meeseeks"
+PART|0|0|ende|"look at me I'm mr. meeseeks"
+PART|0|0|ing|"look at me I'm mr. meeseeks"
+PART|0|0|inge|"look at me I'm mr. meeseeks"
+PART|0|0|et|PAST
+0|0|0||0
