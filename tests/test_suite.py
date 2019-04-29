@@ -4,7 +4,7 @@ from copy import deepcopy
 
 # load_csv test
 
-data = ft.load_csv(open("mid_e_verb_morph.csv"))
+data = ft.load_csv(open("tests/mid_e_verb_morph.csv"))
 
 # PIPE test
 print "ft.summary(data): "
