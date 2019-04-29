@@ -1,72 +1,51 @@
-##################################################
-# Free Tables: A Conduit for the Magic of Python #
-#   Dan Simonson - 2013                          #
-##################################################
+# ft lib
 
-Python data types are awesome. You can do pretty much anything with them.
-One particularly useful arrangement is a list of dictionaries, something
-I started referring to as a "free table."
+This is a library for manipulating lists of dictionaries. 
 
-This is a library for manipulating free tables.
+## Setup
+You can get the stable version using pip:
 
-################# Setup
-    $ sudo python setup.py install
+    $ pip install ft
 
-That's it really. Python's pretty rad. Future versions may be a little more 
-complicated.
+# Conventions
+data: If an argument is called data, a list of dictionaries is expected there.
 
-################# Conventions
-data: If an argument is called data, a free table is expected there.
-
-datum/point: A dictionary of a free table. 
+datum/point: A single dictionary in a list of dictionaries. 
 
 dex: If an argument is called dex, then it should be a dex--a dictionary
-whose values are free tables. These are what indexBy returns. 
+whose values are lists of dictionaries. This is what indexBy returns. 
 
 prop: If an argument is called prop, it's a property. This usually should
 be an entry in every datum in data. It isn't always, sometimes intended for
 retaining consistency. 
 
-################# FAQ
-+ Why don't you make an ftable class?
-    No. That defeats the whole point of free tables. They're supposed to be
-    pliable and easily manipulable using Python syntax. They're a convention,
-    not a type. I only see the imposition of a class upon the structure as
-    a hinderance.
 
-    Additionally, free tables are the gestation of a larger movement towards 
-    a classless society free of bourgeoisie oppression. This is because 
-    algorithms are ideology. Power to the people.
+## Official To-Do/Bugs List
 
-    If you think I'm wrong, you're welcome to prove me so.
-
-
-################# Official To-Do/Bugs List
-
-Bugs:
+### Bugs:
     + load_csv is a half-baked implementation. No quote support.
 
-To-Do/Ideas (No Particular Order):
-    + multidex seems to be superslow--optimizations required.
-    + validate
-    + a version of validate that doesn't raise an error, but instead
+### To-Do/Ideas (No Particular Order):
+    * multidex seems to be superslow--optimizations required.
+    * validate
+    * a version of validate that doesn't raise an error, but instead
         just returns naughty and nice lists.
-    + fill_defaults
+    * fill_defaults
         - given a default entry, it fills each data point that lacks
             a key in default with the kv pair in the default.
-    + dump_csv
+    * dump_csv
         - both load_csv and dump_csv need to be totally written to handle
             dialects more formally
-    + load_json, dump_json - I don't use json enough for this, but it's easy.
-    + indexBy4's performance really dragged once pipe was fixed. Further
+    * load_json, dump_json - I don't use json enough for this, but it's easy.
+    * indexBy4's performance really dragged once pipe was fixed. Further
         optimizations: change pipe's default from lambda x: x to False and
         create two cases.
-    + mv(("x","y"), [{"x":...}, ...]) -> [{"y":...}, ...]
-    + has - remove values that don't have property
-    + fulldex: build a dex of every value available. crazy? absolutely.
-    + kmap(data, k, f)
+    * mv(("x","y"), [{"x":...}, ...]) -> [{"y":...}, ...]
+    * has - remove values that don't have property
+    * fulldex: build a dex of every value available. crazy? absolutely.
+    * kmap(data, k, f)
         d[k] = f(d[k])
-    + tag is so useful, but it's hideous. why is it so wrong? 
+    * tag is so useful, but it's hideous. why is it so wrong? 
         - too expressive, perhaps
 
 
