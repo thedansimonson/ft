@@ -16,7 +16,6 @@ directory, and do the following:
     $ python tests/test_name.py
 
 
-
 ## Conventions
 data: If an argument is called data, a list of dictionaries is expected there.
 
