@@ -1,7 +1,7 @@
 import ft, datetime
 from pprint import pprint
 
-data = ft.load_csv(open("mid_e_verb_morph.csv"))
+data = ft.load_csv(open("tests/mid_e_verb_morph.csv"))
 
 print "ft.summary(data): "
 pprint(ft.summary(data))
