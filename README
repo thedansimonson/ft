@@ -7,7 +7,17 @@ You can get the stable version using pip:
 
     $ pip install ft
 
-# Conventions
+## Running Tests
+
+If you're having trouble running tests, run them from the ft repo root 
+directory, and do the following:
+
+    $ export PYTHONPATH=`pwd`
+    $ python tests/test_name.py
+
+
+
+## Conventions
 data: If an argument is called data, a list of dictionaries is expected there.
 
 datum/point: A single dictionary in a list of dictionaries. 
