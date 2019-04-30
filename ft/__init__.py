@@ -18,6 +18,7 @@ import csv
 from pprint import pprint
 
 version = "1.0.0"
+__version__ = version
 
 ########
 # Meta #
