@@ -52,7 +52,7 @@ def validate(data):
 
 def indexBy(prop, data, pipe = lambda x: x):
     """
-    The sweet baby jesus of the ft library. Many ft functions are built on top
+    Core of the ft library. Many ft functions are built on top
     of indexBy; it's by far the most versatile abstraction in the library.
 
     Would have been called bin, but that's a keyword.
@@ -207,7 +207,7 @@ def merge(data, differs = "All"):
     accumulator = []
 
     for key in dex:
-        butter = dict(zip(differs, key)) #heheheh
+        butter = dict(list(zip(differs, key))) #heheheh
         
         for indiffer in indiffers:
             #accumulate the indistinguishable things
@@ -277,7 +277,7 @@ dialect_table = [{"dialect": "basic",
                   "cell_delimiter": ",",
                   "row_delimiter": "\n",
                   "text_delimiter": "\"",
-                  "pipe": lambda v: unicode(v).encode("utf-8")}
+                  "pipe": lambda v: str(v).encode("utf-8")}
                 ]
 
 dialect_dex = indexBy("dialect", dialect_table)
@@ -312,10 +312,10 @@ def load_csv(fstream, dialect = dialect_dex["basic"][0]):
     piper = dialect["pipe"]
 
     def row_reader(row):
-        return map(piper, row.split(celler))
+        return list(map(piper, row.split(celler)))
 
     rows = fstream.read().split(rower)
-    keys, rows = row_reader(rows[0]), map(row_reader,rows[1:])
+    keys, rows = row_reader(rows[0]), list(map(row_reader,rows[1:]))
     data = [{k: v for k,v in zip(keys, r)} for r in rows if len(r) == len(keys)]
     return data
 
