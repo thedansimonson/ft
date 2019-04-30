@@ -1,4 +1,5 @@
-# 0.2.8:
+# 1.0.0:
+    * Python 3 support.
     * CHANGELOG created. It's markdown.
 
 # 0.2.7:
