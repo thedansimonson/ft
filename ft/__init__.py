@@ -1,32 +1,17 @@
 """
-Free Tables: A Conduit for the Magic of Python
-    Dan Simonson - 2013, 2014, 2015
-
-Python data types are awesome. You can do pretty much anything with them.
-One particularly useful arrangement is a list of dictionaries, something
-I started referring to as a "free table."
-
-This is a library for manipulating free tables.
+ft - a Python module for manipulating lists of dictionaries. All dictionaries 
+should have the same keys. 
 
 Conventions:
-data: If an argument is called data, a free table is expected there.
+data: If an argument is called data, a list of dictionaries is expected there.
 
-datum/point: A dictionary of a free table. 
+datum/point: A single dictionary. 
 
 dex: If an argument is called dex, then it should be a dex--a dictionary
-whose values are free tables. These are what are returned by the totally
-awesome and ever useful indexBy function.
+whose values are lists of dictionaries. (A dex is returned by indexBy.)
 
 prop: If an argument is called prop, it's a property. This usually should
-be an entry in every datum in data. It isn't always, sometimes intended for
-retaining consistency. 
-
-FAQ:
-+ Why don't you make an ftable class?
-    No. That defeats the whole point of free tables. They're supposed to be
-    pliable and easily manipulable using Python syntax. They're a convention,
-    not a type. I only see the imposition of a class upon the structure as
-    a hinderance.
+be a key in every datum in data. 
 
 """
 import csv

@@ -1,7 +1,7 @@
 from pprint import pprint
 import ft
 
-print ft.version,"csv test"
+print(ft.version,"csv test")
 
 raw_input = open("tests/mid_e_verb_morph.csv")
 data = ft.load_csv(raw_input)
