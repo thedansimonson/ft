@@ -1,38 +1,24 @@
 """
-Free Tables: A Conduit for the Magic of Python
-    Dan Simonson - 2013, 2014, 2015
-
-Python data types are awesome. You can do pretty much anything with them.
-One particularly useful arrangement is a list of dictionaries, something
-I started referring to as a "free table."
-
-This is a library for manipulating free tables.
+ft - a Python module for manipulating lists of dictionaries. All dictionaries 
+should have the same keys. 
 
 Conventions:
-data: If an argument is called data, a free table is expected there.
+data: If an argument is called data, a list of dictionaries is expected there.
 
-datum/point: A dictionary of a free table. 
+datum/point: A single dictionary. 
 
 dex: If an argument is called dex, then it should be a dex--a dictionary
-whose values are free tables. These are what are returned by the totally
-awesome and ever useful indexBy function.
+whose values are lists of dictionaries. (A dex is returned by indexBy.)
 
 prop: If an argument is called prop, it's a property. This usually should
-be an entry in every datum in data. It isn't always, sometimes intended for
-retaining consistency. 
-
-FAQ:
-+ Why don't you make an ftable class?
-    No. That defeats the whole point of free tables. They're supposed to be
-    pliable and easily manipulable using Python syntax. They're a convention,
-    not a type. I only see the imposition of a class upon the structure as
-    a hinderance.
+be a key in every datum in data. 
 
 """
 import csv
 from pprint import pprint
 
-version = "0.2.7"
+version = "1.0.0"
+__version__ = version
 
 ########
 # Meta #
@@ -67,7 +53,7 @@ def validate(data):
 
 def indexBy(prop, data, pipe = lambda x: x):
     """
-    The sweet baby jesus of the ft library. Many ft functions are built on top
+    Core of the ft library. Many ft functions are built on top
     of indexBy; it's by far the most versatile abstraction in the library.
 
     Would have been called bin, but that's a keyword.
@@ -222,7 +208,7 @@ def merge(data, differs = "All"):
     accumulator = []
 
     for key in dex:
-        butter = dict(zip(differs, key)) #heheheh
+        butter = dict(list(zip(differs, key))) #heheheh
         
         for indiffer in indiffers:
             #accumulate the indistinguishable things
@@ -292,7 +278,7 @@ dialect_table = [{"dialect": "basic",
                   "cell_delimiter": ",",
                   "row_delimiter": "\n",
                   "text_delimiter": "\"",
-                  "pipe": lambda v: unicode(v).encode("utf-8")}
+                  "pipe": lambda v: str(v).encode("utf-8")}
                 ]
 
 dialect_dex = indexBy("dialect", dialect_table)
@@ -327,10 +313,10 @@ def load_csv(fstream, dialect = dialect_dex["basic"][0]):
     piper = dialect["pipe"]
 
     def row_reader(row):
-        return map(piper, row.split(celler))
+        return list(map(piper, row.split(celler)))
 
     rows = fstream.read().split(rower)
-    keys, rows = row_reader(rows[0]), map(row_reader,rows[1:])
+    keys, rows = row_reader(rows[0]), list(map(row_reader,rows[1:]))
     data = [{k: v for k,v in zip(keys, r)} for r in rows if len(r) == len(keys)]
     return data
 
